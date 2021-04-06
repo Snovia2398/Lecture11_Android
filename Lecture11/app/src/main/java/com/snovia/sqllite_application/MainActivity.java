@@ -60,7 +60,12 @@ public class MainActivity extends AppCompatActivity {
                 RefreshData();
             }
         });
-
+        listViewCustomer.setOnItemClickListener(((parent, view, position, id) -> {
+            CustomerModel customerModel=(CustomerModel) parent. getAdapter().getItem(position);
+            dbHelper = new DBHelper(MainActivity.this);
+            dbHelper.deleteCustomer(customerModel.getId());
+            RefreshData();
+        }));
     }
 
     private void RefreshData() {

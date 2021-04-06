@@ -46,22 +46,27 @@ public class DBHelper extends SQLiteOpenHelper {
         if (insert == -1) { return false; }
         else{return true;}
     }
+    public void deleteCustomer(int id){
+        SQLiteDatabase DB=this.getReadableDatabase();
+        DB.delete(CUST_TABLE,CUSTOMER_ID + "=" + id,null);
+    }
     public List<CustomerModel> getAllRecord(){
         List<CustomerModel> myList= new ArrayList<>();
         String query= "Select * FROM " + CUST_TABLE;
-        SQLiteDatabase DB= this.getReadableDatabase();
-        Cursor cursor= DB.rawQuery(query,null);
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor= db.rawQuery(query,null);
         if(cursor.moveToFirst()){
             do{
+                int id= cursor.getInt(0);
                 String custName= cursor.getString(1);
                 int custAge= cursor.getInt(2);
                 Boolean isActive= cursor.getInt(3) == 1? true: false;
-                CustomerModel myCustModel= new CustomerModel(custName,custAge,isActive,1);
+                CustomerModel myCustModel= new CustomerModel(custName,custAge,isActive,id);
                 myList.add(myCustModel);
             }while (cursor.moveToNext());
         }
         cursor.close();
-        DB.close();
+        db.close();
         return myList;
     }
 }
